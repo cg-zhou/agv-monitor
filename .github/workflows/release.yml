@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'  # Trigger on version tags like v1.0.0
 
+permissions:
+  contents: write
+  actions: read
+
 jobs:
   build:
     runs-on: windows-latest
@@ -38,31 +42,21 @@ jobs:
         shell: pwsh
         run: |
           $version = '${{ github.ref }}'.Replace('refs/tags/v', '')
-          $releaseDir = "release\AGV-Monitor-$version"
           
-          # Create release directory
-          New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
+          # Create a temporary directory for the exe
+          $tempDir = "temp-release"
+          New-Item -ItemType Directory -Path $tempDir -Force | Out-Null
           
-          # Copy executable
-          Copy-Item "src\AGV.Monitor\bin\Release\net48\AGV Monitor.exe" $releaseDir -Force
+          # Copy only the executable to temp directory
+          Copy-Item "src\AGV.Monitor\bin\Release\net48\AGV Monitor.exe" $tempDir -Force
           
-          # Copy documentation
-          Copy-Item "README.md" $releaseDir -Force
-          Copy-Item "README.cn.md" $releaseDir -Force
-          Copy-Item "LICENSE" $releaseDir -Force
+          # Create ZIP archive directly from exe (no subdirectory)
+          Compress-Archive -Path "$tempDir\*" -DestinationPath "AGV-Monitor-$version.zip" -Force
           
-          # Create ZIP archive
-          Compress-Archive -Path $releaseDir -DestinationPath "AGV-Monitor-$version.zip" -Force
+          # Cleanup
+          Remove-Item $tempDir -Recurse -Force
           
-          # Also create a standalone exe zip
-          $exeZipDir = "AGV-Monitor-$version-exe"
-          New-Item -ItemType Directory -Path $exeZipDir -Force | Out-Null
-          Copy-Item "src\AGV.Monitor\bin\Release\net48\AGV Monitor.exe" $exeZipDir -Force
-          Compress-Archive -Path $exeZipDir -DestinationPath "AGV-Monitor-$version-exe.zip" -Force
-          
-          Write-Host "Release package created successfully"
-          Write-Host "AGV-Monitor-$version.zip"
-          Write-Host "AGV-Monitor-$version-exe.zip"
+          Write-Host "Release package created: AGV-Monitor-$version.zip"
       
       - name: Generate Release Notes
         id: release_notes
@@ -86,15 +80,13 @@ jobs:
           echo "EOF" >> $env:GITHUB_OUTPUT
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            AGV-Monitor-*.zip
+          files: AGV-Monitor-*.zip
           body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-status:
     runs-on: windows-latest
