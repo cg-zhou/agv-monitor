@@ -1,0 +1,32 @@
+# EditorConfig 配置文件
+# 更多信息请参考：https://editorconfig.org/
+
+# 顶级 EditorConfig 文件
+root = true
+
+# 所有文件的默认设置
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C# 项目文件和 props 文件的设置
+[*.{csproj,props}]
+indent_style = space
+indent_size = 2
+
+# C# 源代码文件的设置
+[*.cs]
+indent_style = space
+indent_size = 4
+
+# XML 文件的设置
+[*.{xml,xaml}]
+indent_style = space
+indent_size = 4
+
+# JSON 文件的设置
+[*.json]
+indent_style = space
+indent_size = 2

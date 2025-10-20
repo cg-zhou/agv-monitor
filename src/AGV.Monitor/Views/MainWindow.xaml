@@ -1,0 +1,52 @@
+<Window x:Class="Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Viewer"
+        mc:Ignorable="d"
+        Title="AGV Monitor" Width="800" Height="600"
+        WindowStartupLocation="CenterScreen"
+        KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 工具栏 -->
+        <ToolBar Grid.Row="0" Margin="5" Height="36">
+            <Button Content="下一秒 (Space)" Width="100" Click="NextSecondButton_Click"/>
+            <Separator/>
+            <Button Content="重置 (Esc)" Width="120" Click="ResetButton_Click"/>
+            <Separator/>
+            <CheckBox Name="heatmapToggle" Width="120" Content="显示热点图 (F1)"
+                      Checked="HeatmapToggle_Checked" Unchecked="HeatmapToggle_Unchecked" />
+            <Separator/>
+            <CheckBox Name="trajectoryToggle" Width="120" Content="显示轨迹 (F2)"
+                      Checked="TrajectoryToggle_Checked" Unchecked="TrajectoryToggle_Unchecked" />
+        </ToolBar>
+
+        <!-- 地图显示区域 -->
+        <Viewbox Grid.Row="1" Stretch="Uniform" StretchDirection="Both" Margin="10">
+            <Canvas Name="mapCanvas" Background="White"/>
+        </Viewbox>
+
+        <!-- 底部状态栏 -->
+        <StatusBar Grid.Row="2" Padding="10 0">
+            <StatusBarItem>
+                <TextBlock Name="statusText" Text="就绪"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Name="secondText" Text="秒数: 0"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Name="completedTaskText" Text="完成任务数: 0"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Name="infoText" Text="地图元素: 0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

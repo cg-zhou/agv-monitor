@@ -1,0 +1,12 @@
+timestamp,name,X,Y,pitch,loaded,destination,Emergency,id
+0,AGV01,3,1,90,false,,false,
+1,AGV01,3,2,90,false,,false,
+2,AGV01,5,4,90,false,,false,
+3,AGV01,22,6,90,false,,false,
+4,AGV01,2,6,90,true,EP10,false,Task-SP01-1
+5,AGV02,3,2,90,false,,false,
+6,AGV01,3,6,45,true,EP10,false,Task-SP01-1
+7,AGV02,3,2,90,false,,false,
+8,AGV01,4,5,90,true,EP10,false,Task-SP01-1
+9,AGV01,14,4,90,false,,false,
+10,AGV01,14,4,90,false,,false,

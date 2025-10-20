@@ -1,0 +1,15 @@
+type,name,x,y,pitch
+StartPoint,SP01,1,6,
+StartPoint,SP02,1,10,
+StartPoint,SP03,1,14,
+StartPoint,SP04,20,6,
+StartPoint,SP05,20,10,
+StartPoint,SP06,20,14,
+EndPoint,EP01,6,4,
+EndPoint,EP02,6,8,
+EndPoint,EP04,6,16,
+EndPoint,EP10,14,4,
+EndPoint,EP09,14,8,
+EndPoint,EP13,14,16,
+Agv,AGV01,3,1,90
+Agv,AGV02,6,1,90
