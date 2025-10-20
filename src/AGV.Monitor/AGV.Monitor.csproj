@@ -6,6 +6,17 @@
     <LangVersion>latest</LangVersion>
     <AssemblyName>AGV Monitor</AssemblyName>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <Company>AGV Monitor</Company>
+    <Product>AGV Monitor</Product>
+    <Description>AGV trajectory visualization tool with multi-agent support</Description>
+    <PackageProjectUrl>https://github.com/cg-zhou/agv-monitor</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/cg-zhou/agv-monitor</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="icon.ico" />

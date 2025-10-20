@@ -4,47 +4,47 @@
 
 [![GitHub license](https://img.shields.io/github/license/cg-zhou/agv-monitor.svg)](https://github.com/cg-zhou/agv-monitor/blob/main/LICENSE)
 
-A real-time AGV (Automated Guided Vehicle) monitoring and simulation system built with WPF and C#. Designed for warehouse automation.
+AGV Monitor is an AGV trajectory visualization tool developed based on WPF and C#.
 
 ## Features
 
-- **Multi-AGV Trajectory Visualization**: Visualize movement paths of multiple AGVs with time-cost information
-- **Second-by-Second Playback**: Step through trajectories frame-by-frame to analyze each movement
-- **Real-time Statistics**: Display current timestamp and completed task count
+- **Multi-AGV Trajectory Visualization**: Real-time display of motion paths for multiple AGVs, including time cost information
+- **Frame-by-Frame Playback**: View and analyze trajectories frame by frame
+- **Real-time Statistics**: Display timestamps and completed task count
 - **Keyboard Shortcuts**: Efficient keyboard control
-- **Lightweight**: Compiled size is only 124KB, no additional runtime required on Windows 10+
-- **Live Map**: Interactive grid-based map with real-time AGV position updates
+- **Lightweight**: Only 124KB after compilation, no additional runtime required on Windows 10 and above
+- **Interactive Map**: Real-time grid map with AGV position updates
 - **Task Scheduling**: Support for task scheduling and execution
-- **Heat Map**: Real-time heat map visualization
+- **Heatmap**: Real-time heatmap display
 - **Path Planning**: Automatic route calculation and conflict resolution
 
 ## Technology Stack
 
 - **Framework**: WPF (Windows Presentation Foundation)
-- **Language**: C# with .NET Framework 4.8
-- **Architecture**: MVVM-inspired separation of concerns
-- **Testing**: xUnit for unit tests
-- **Compatibility**: Windows 10+ (no additional runtime required)
+- **Language**: C# (.NET Framework 4.8)
+- **Architecture**: MVVM pattern with separation of concerns
+- **Testing**: xUnit unit testing framework
+- **Compatibility**: Windows 10 and above (no additional runtime required)
 
 ## Project Structure
 
 ```
 AGV.Monitor/
-├── Services/              # Business logic (AGV, Task, Scheduler)
-├── Geometry/              # Path planning and geometric calculations
-├── Parsers/               # CSV data parsing
-├── Views/                 # UI components (MainWindow, MapRenderer, Heat Map)
-├── Utils/                 # Utility functions
-├── EmbeddedResources/     # Data files (map_data.csv, task_csv.csv)
-└── App.xaml               # Application entry point
+ Services/              # Business logic (AGV, Tasks, Scheduler)
+ Geometry/              # Path planning and geometric calculations
+ Parsers/               # CSV data parsing
+ Views/                 # UI components (Main window, Map renderer, Heatmap)
+ Utils/                 # Utility functions
+ EmbeddedResources/     # Data files (map_data.csv, task_csv.csv)
+ App.xaml               # Application entry point
 
 AGV.Monitor.UnitTests/     # Unit tests
 ```
 
-## Building and Running
+## Build and Run
 
 ### Prerequisites
-- Visual Studio 2022 (or later) with .NET desktop development workload
+- Visual Studio 2022 (or higher) with .NET desktop development workload installed
 - .NET Framework 4.8 Developer Pack
 
 ### Build
@@ -62,7 +62,7 @@ cd src/AGV.Monitor/bin/Release
 ## Configuration
 
 Edit embedded resource files to configure map data and tasks:
-- EmbeddedResources/map_data.csv - Map information: task start/end points, AGV starting positions
+- EmbeddedResources/map_data.csv - Map information: task start point, end point, AGV starting positions
 - EmbeddedResources/task_csv.csv - AGV tasks
 
 ## License
@@ -71,5 +71,6 @@ Edit embedded resource files to configure map data and tasks:
 
 ## Documentation
 
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Change Log](CHANGELOG.md)
+- [Contributing Guide](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
+

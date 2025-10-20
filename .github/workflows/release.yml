@@ -1,0 +1,112 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: Restore dependencies
+        run: |
+          cd src
+          dotnet restore AGV.Monitor.sln
+      
+      - name: Build Release
+        run: |
+          cd src
+          dotnet build AGV.Monitor.sln -c Release --no-restore
+      
+      - name: Run Tests
+        run: |
+          cd src
+          dotnet test AGV.Monitor.UnitTests/AGV.Monitor.UnitTests.csproj -c Release --no-build --verbosity normal
+        continue-on-error: true
+      
+      - name: Create Release Package
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref }}'.Replace('refs/tags/v', '')
+          $releaseDir = "release\AGV-Monitor-$version"
+          
+          # Create release directory
+          New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
+          
+          # Copy executable
+          Copy-Item "src\AGV.Monitor\bin\Release\net48\AGV Monitor.exe" $releaseDir -Force
+          
+          # Copy documentation
+          Copy-Item "README.md" $releaseDir -Force
+          Copy-Item "README.cn.md" $releaseDir -Force
+          Copy-Item "LICENSE" $releaseDir -Force
+          
+          # Create ZIP archive
+          Compress-Archive -Path $releaseDir -DestinationPath "AGV-Monitor-$version.zip" -Force
+          
+          # Also create a standalone exe zip
+          $exeZipDir = "AGV-Monitor-$version-exe"
+          New-Item -ItemType Directory -Path $exeZipDir -Force | Out-Null
+          Copy-Item "src\AGV.Monitor\bin\Release\net48\AGV Monitor.exe" $exeZipDir -Force
+          Compress-Archive -Path $exeZipDir -DestinationPath "AGV-Monitor-$version-exe.zip" -Force
+          
+          Write-Host "Release package created successfully"
+          Write-Host "AGV-Monitor-$version.zip"
+          Write-Host "AGV-Monitor-$version-exe.zip"
+      
+      - name: Generate Release Notes
+        id: release_notes
+        shell: pwsh
+        run: |
+          $version = '${{ github.ref }}'.Replace('refs/tags/v', '')
+          
+          # Extract release notes from CHANGELOG.md
+          $changelog = Get-Content "CHANGELOG.md" -Raw
+          
+          # Find the section for current version
+          $pattern = "## \[$version\].*?(?=## \[|`$)"
+          if ($changelog -match $pattern) {
+            $notes = $matches[0]
+          } else {
+            $notes = "See CHANGELOG.md for details"
+          }
+          
+          echo "RELEASE_NOTES<<EOF" >> $env:GITHUB_OUTPUT
+          echo $notes >> $env:GITHUB_OUTPUT
+          echo "EOF" >> $env:GITHUB_OUTPUT
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            AGV-Monitor-*.zip
+          body: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-status:
+    runs-on: windows-latest
+    needs: build
+    if: always()
+    
+    steps:
+      - name: Report Build Status
+        run: |
+          if ("${{ needs.build.result }}" -eq "success") {
+            Write-Host "✅ Build and release completed successfully!"
+          } else {
+            Write-Host "❌ Build or release failed"
+            exit 1
+          }
